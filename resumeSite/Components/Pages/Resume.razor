@@ -1,0 +1,230 @@
+﻿@page "/submitResume"
+@using System.ComponentModel.DataAnnotations
+@inject IDbConnection DbConnection
+
+<PageTitle>Submit Your Resume</PageTitle>
+
+<h1>Welcome to the Resume Submission Form</h1>
+
+<EditForm Model="@resumeModel" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <!-- Personal Details Section -->
+    <div class="mb-3">
+        <label for="ID">Resume ID</label>
+        <InputText id="ID" class="form-control" @bind-Value="resumeModel.ID" name="ResumeID" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Name">Full Name</label>
+        <InputText id="Name" class="form-control" @bind-Value="resumeModel.Name" name="FullName" />
+    </div>
+
+    <div class="mb-3">
+        <label for="GitHub">GitHub</label>
+        <InputText id="GitHub" class="form-control" @bind-Value="resumeModel.GitHub" name="GitHubProfile" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Email">Email</label>
+        <InputText id="Email" class="form-control" @bind-Value="resumeModel.Email" name="Email" />
+    </div>
+
+    <div class="mb-3">
+        <label for="City">City</label>
+        <InputText id="City" class="form-control" @bind-Value="resumeModel.City" name="City" />
+    </div>
+
+    <div class="mb-3">
+        <label for="State">State</label>
+        <InputText id="State" class="form-control" @bind-Value="resumeModel.State" name="State" />
+    </div>
+
+    <!-- Work Experience Section -->
+    <h3>Work Experience</h3>
+    <div class="mb-3">
+        <label for="PastExperience1">Experience 1</label>
+        <InputText id="PastExperience1" class="form-control" @bind-Value="resumeModel.PastExperience1" name="Experience1" />
+    </div>
+
+    <div class="mb-3">
+        <label for="PastExperience2">Experience 2</label>
+        <InputText id="PastExperience2" class="form-control" @bind-Value="resumeModel.PastExperience2" name="Experience2" />
+    </div>
+
+    <div class="mb-3">
+        <label for="PastExperience3">Experience 3</label>
+        <InputText id="PastExperience3" class="form-control" @bind-Value="resumeModel.PastExperience3" name="Experience3" />
+    </div>
+
+    <h4>Experience Details</h4>
+    <div class="mb-3">
+        <label for="PastExperienceDetails1">Details for Experience 1</label>
+        <InputTextArea id="PastExperienceDetails1" class="form-control" @bind-Value="resumeModel.PastExperienceDetails1" name="ExperienceDetails1" />
+    </div>
+
+    <div class="mb-3">
+        <label for="PastExperienceDetails2">Details for Experience 2</label>
+        <InputTextArea id="PastExperienceDetails2" class="form-control" @bind-Value="resumeModel.PastExperienceDetails2" name="ExperienceDetails2" />
+    </div>
+
+    <div class="mb-3">
+        <label for="PastExperienceDetails3">Details for Experience 3</label>
+        <InputTextArea id="PastExperienceDetails3" class="form-control" @bind-Value="resumeModel.PastExperienceDetails3" name="ExperienceDetails3" />
+    </div>
+
+    <!-- Projects Section -->
+    <h3>Projects</h3>
+    <div class="mb-3">
+        <label for="Project1">Project 1</label>
+        <InputText id="Project1" class="form-control" @bind-Value="resumeModel.Project1" name="Project1" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Project2">Project 2</label>
+        <InputText id="Project2" class="form-control" @bind-Value="resumeModel.Project2" name="Project2" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Project3">Project 3</label>
+        <InputText id="Project3" class="form-control" @bind-Value="resumeModel.Project3" name="Project3" />
+    </div>
+
+    <h4>Project Details</h4>
+    <div class="mb-3">
+        <label for="ProjectDetails1">Details for Project 1</label>
+        <InputTextArea id="ProjectDetails1" class="form-control" @bind-Value="resumeModel.ProjectDetails1" name="ProjectDetails1" />
+    </div>
+
+    <div class="mb-3">
+        <label for="ProjectDetails2">Details for Project 2</label>
+        <InputTextArea id="ProjectDetails2" class="form-control" @bind-Value="resumeModel.ProjectDetails2" name="ProjectDetails2" />
+    </div>
+
+    <div class="mb-3">
+        <label for="ProjectDetails3">Details for Project 3</label>
+        <InputTextArea id="ProjectDetails3" class="form-control" @bind-Value="resumeModel.ProjectDetails3" name="ProjectDetails3" />
+    </div>
+
+    <!-- Skills Section -->
+    <h3>Skills</h3>
+    <div class="mb-3">
+        <label for="Languages">Languages</label>
+        <InputTextArea id="Languages" class="form-control" @bind-Value="resumeModel.Languages" name="Languages" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Technology">Technology</label>
+        <InputTextArea id="Technology" class="form-control" @bind-Value="resumeModel.Technology" name="Technology" />
+    </div>
+
+    <div class="mb-3">
+        <label for="PersonalSkills">Personal Skills</label>
+        <InputTextArea id="PersonalSkills" class="form-control" @bind-Value="resumeModel.PersonalSkills" name="PersonalSkills" />
+    </div>
+
+    <!-- Submit Button -->
+    <button class="btn btn-success" type="submit">Submit Resume</button>
+</EditForm>
+
+@if (isSubmitted)
+{
+    <div class="alert alert-success mt-4">
+        <strong>Your resume has been successfully submitted!</strong>
+    </div>
+}
+
+@code {
+    private ResumeModel resumeModel = new();
+    private bool isSubmitted = false;
+
+    // Database connection
+    private string connectionString = "Server=localhost; Database=resumeSite; User=root; Password=yourpassword";
+
+    // Handle form submission
+    private void HandleSubmit()
+    {
+        isSubmitted = true;
+        SaveResumeToDatabase();
+    }
+
+    // Save data to the database
+    private async Task SaveResumeToDatabase()
+    {
+        var query = @"
+            INSERT INTO resumes (ID, Name, GitHub, Email, City, State, PastExperience1, PastExperience2, PastExperience3, 
+                                 PastExperienceDetails1, PastExperienceDetails2, PastExperienceDetails3, Project1, 
+                                 Project2, Project3, ProjectDetails1, ProjectDetails2, ProjectDetails3, Languages, 
+                                 Technology, PersonalSkills)
+            VALUES (@ID, @Name, @GitHub, @Email, @City, @State, @PastExperience1, @PastExperience2, @PastExperience3, 
+                    @PastExperienceDetails1, @PastExperienceDetails2, @PastExperienceDetails3, @Project1, 
+                    @Project2, @Project3, @ProjectDetails1, @ProjectDetails2, @ProjectDetails3, @Languages, 
+                    @Technology, @PersonalSkills);";
+
+        using (var connection = new MySqlConnection(connectionString))
+        {
+            await connection.OpenAsync();
+
+            var command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@ID", resumeModel.ID);
+            command.Parameters.AddWithValue("@Name", resumeModel.Name);
+            command.Parameters.AddWithValue("@GitHub", resumeModel.GitHub);
+            command.Parameters.AddWithValue("@Email", resumeModel.Email);
+            command.Parameters.AddWithValue("@City", resumeModel.City);
+            command.Parameters.AddWithValue("@State", resumeModel.State);
+            command.Parameters.AddWithValue("@PastExperience1", resumeModel.PastExperience1);
+            command.Parameters.AddWithValue("@PastExperience2", resumeModel.PastExperience2);
+            command.Parameters.AddWithValue("@PastExperience3", resumeModel.PastExperience3);
+            command.Parameters.AddWithValue("@PastExperienceDetails1", resumeModel.PastExperienceDetails1);
+            command.Parameters.AddWithValue("@PastExperienceDetails2", resumeModel.PastExperienceDetails2);
+            command.Parameters.AddWithValue("@PastExperienceDetails3", resumeModel.PastExperienceDetails3);
+            command.Parameters.AddWithValue("@Project1", resumeModel.Project1);
+            command.Parameters.AddWithValue("@Project2", resumeModel.Project2);
+            command.Parameters.AddWithValue("@Project3", resumeModel.Project3);
+            command.Parameters.AddWithValue("@ProjectDetails1", resumeModel.ProjectDetails1);
+            command.Parameters.AddWithValue("@ProjectDetails2", resumeModel.ProjectDetails2);
+            command.Parameters.AddWithValue("@ProjectDetails3", resumeModel.ProjectDetails3);
+            command.Parameters.AddWithValue("@Languages", resumeModel.Languages);
+            command.Parameters.AddWithValue("@Technology", resumeModel.Technology);
+            command.Parameters.AddWithValue("@PersonalSkills", resumeModel.PersonalSkills);
+
+            await command.ExecuteNonQueryAsync();
+        }
+    }
+
+    // Resume data model
+    public class ResumeModel
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string GitHub { get; set; }
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+        public string Email { get; set; }
+
+        public string City { get; set; }
+        public string State { get; set; }
+
+        public string PastExperience1 { get; set; }
+        public string PastExperience2 { get; set; }
+        public string PastExperience3 { get; set; }
+
+        public string PastExperienceDetails1 { get; set; }
+        public string PastExperienceDetails2 { get; set; }
+        public string PastExperienceDetails3 { get; set; }
+
+        public string Project1 { get; set; }
+        public string Project2 { get; set; }
+        public string Project3 { get; set; }
+
+        public string ProjectDetails1 { get; set; }
+        public string ProjectDetails2 { get; set; }
+        public string ProjectDetails3 { get; set; }
+
+        public string Languages { get; set; }
+        public string Technology { get; set; }
+        public string PersonalSkills { get; set; }
+    }
+}
