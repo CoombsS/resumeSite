@@ -1,64 +1,134 @@
-﻿@page "/DisplayResume"
-@attribute [StreamRendering]
+﻿@page "/displayResume"
+@using MySql.Data.MySqlClient
+@using System.ComponentModel.DataAnnotations
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>View Resumes</PageTitle>
 
-<h1>Weather</h1>
+<h1 class="mb-4">Submitted Resumes</h1>
 
-<p>This component demonstrates showing data.</p>
-
-@if (forecasts == null)
+@if (isLoading)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Loading…</em></p>
+}
+else if (loadError != null)
+{
+    <div class="alert alert-danger">Error: @loadError</div>
+}
+else if (resumes.Count == 0)
+{
+    <p>No resumes found.</p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th aria-label="Temperature in Celsius">Temp. (C)</th>
-                <th aria-label="Temperature in Farenheit">Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @foreach (var r in resumes)
+    {
+        <div class="card mb-3 p-3">
+            <h4>@r.Name (@r.Email)</h4>
+            <p><strong>GitHub:</strong> @r.GitHub</p>
+            <p><strong>Location:</strong> @r.City, @r.State</p>
+            <h5>Experiences</h5>
+            <ul>
+                <li>@r.PastExperience1 @r.PastExperienceDetails1</li>
+                <li>@r.PastExperience2 @r.PastExperienceDetails2</li>
+                <li>@r.PastExperience3 @r.PastExperienceDetails3</li>
+            </ul>
+            <h5>Projects</h5>
+            <ul>
+                <li>@r.Project1 @r.ProjectDetails1</li>
+                <li>@r.Project2 @r.ProjectDetails2</li>
+                <li>@r.Project3 @r.ProjectDetails3</li>
+            </ul>
+            <p><strong>Languages:</strong> @r.Languages</p>
+            <p><strong>Technology:</strong> @r.Technology</p>
+            <p><strong>Skills:</strong> @r.PersonalSkills</p>
+        </div>
+    }
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private List<ResumeModel> resumes = new();
+    private bool isLoading = true;
+    private string? loadError;
+
+    private string connStr = "Server=localhost;Database=resumesite;User=root;Password=";
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        try
         {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
+            using var conn = new MySqlConnection(connStr);
+            await conn.OpenAsync();
+
+            var query = "SELECT * FROM resume";
+            using var cmd = new MySqlCommand(query, conn);
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                resumes.Add(new ResumeModel
+                {
+                    Id = reader["Id"]?.ToString(),
+                    Name = reader["Name"]?.ToString(),
+                    GitHub = reader["GitHub"]?.ToString(),
+                    Email = reader["Email"]?.ToString(),
+                    City = reader["City"]?.ToString(),
+                    State = reader["State"]?.ToString(),
+                    PastExperience1 = reader["PastExperience1"]?.ToString(),
+                    PastExperienceDetails1 = reader["PastExperienceDetails1"]?.ToString(),
+                    PastExperience2 = reader["PastExperience2"]?.ToString(),
+                    PastExperienceDetails2 = reader["PastExperienceDetails2"]?.ToString(),
+                    PastExperience3 = reader["PastExperience3"]?.ToString(),
+                    PastExperienceDetails3 = reader["PastExperienceDetails3"]?.ToString(),
+                    Project1 = reader["Project1"]?.ToString(),
+                    ProjectDetails1 = reader["ProjectDetails1"]?.ToString(),
+                    Project2 = reader["Project2"]?.ToString(),
+                    ProjectDetails2 = reader["ProjectDetails2"]?.ToString(),
+                    Project3 = reader["Project3"]?.ToString(),
+                    ProjectDetails3 = reader["ProjectDetails3"]?.ToString(),
+                    Languages = reader["Languages"]?.ToString(),
+                    Technology = reader["Technology"]?.ToString(),
+                    PersonalSkills = reader["PersonalSkills"]?.ToString()
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            loadError = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
 
-    private class WeatherForecast
+    public class ResumeModel
     {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public string? Id { get; set; }
+        public string? Name { get; set; }
+        public string? GitHub { get; set; }
+
+        [EmailAddress]
+        public string? Email { get; set; }
+
+        public string? City { get; set; }
+        public string? State { get; set; }
+
+        public string? PastExperience1 { get; set; }
+        public string? PastExperienceDetails1 { get; set; }
+        public string? PastExperience2 { get; set; }
+        public string? PastExperienceDetails2 { get; set; }
+        public string? PastExperience3 { get; set; }
+        public string? PastExperienceDetails3 { get; set; }
+
+        public string? Project1 { get; set; }
+        public string? ProjectDetails1 { get; set; }
+        public string? Project2 { get; set; }
+        public string? ProjectDetails2 { get; set; }
+        public string? Project3 { get; set; }
+        public string? ProjectDetails3 { get; set; }
+
+        public string? Languages { get; set; }
+        public string? Technology { get; set; }
+        public string? PersonalSkills { get; set; }
     }
 }

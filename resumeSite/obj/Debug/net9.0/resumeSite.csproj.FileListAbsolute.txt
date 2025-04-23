@@ -196,3 +196,15 @@ C:\Users\user\resumeBranch\resumeSite\resumeSite\obj\Debug\net9.0\refint\resumeS
 C:\Users\user\resumeBranch\resumeSite\resumeSite\obj\Debug\net9.0\resumeSite.pdb
 C:\Users\user\resumeBranch\resumeSite\resumeSite\obj\Debug\net9.0\resumeSite.genruntimeconfig.cache
 C:\Users\user\resumeBranch\resumeSite\resumeSite\obj\Debug\net9.0\ref\resumeSite.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\DnsClient.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Microsoft.AspNetCore.Components.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\MongoDB.Bson.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\MongoDB.Driver.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\SharpCompress.dll
+C:\Users\user\resumeBranch\resumeSite\resumeSite\bin\Debug\net9.0\Snappier.dll
