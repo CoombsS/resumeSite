@@ -1552,11 +1552,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Desktop\\resumeSite\\resumeSite\\resumeSite.csproj",
+      "projectUniqueName": "C:\\Users\\user\\resumeBranch\\resumeSite\\resumeSite\\resumeSite.csproj",
       "projectName": "resumeSite",
-      "projectPath": "C:\\Users\\user\\Desktop\\resumeSite\\resumeSite\\resumeSite.csproj",
+      "projectPath": "C:\\Users\\user\\resumeBranch\\resumeSite\\resumeSite\\resumeSite.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Desktop\\resumeSite\\resumeSite\\obj\\",
+      "outputPath": "C:\\Users\\user\\resumeBranch\\resumeSite\\resumeSite\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
