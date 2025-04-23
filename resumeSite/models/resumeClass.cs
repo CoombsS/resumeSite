@@ -2,7 +2,6 @@ namespace resumeSite.Models
 {
     public class ResumeModelMongo
     {
-        public string? Id { get; set; }
         public string? Name { get; set; }
         public string? GitHub { get; set; }
         public string? Email { get; set; }
