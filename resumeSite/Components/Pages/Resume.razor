@@ -11,11 +11,6 @@
     <ValidationSummary />
 
     <div class="mb-3">
-        <label>ID</label>
-        <InputText class="form-control" @bind-Value="resumeModel.Id" @bind-Value:event="oninput" />
-    </div>
-
-    <div class="mb-3">
         <label>Full Name</label>
         <InputText class="form-control" @bind-Value="resumeModel.Name" @bind-Value:event="oninput" />
     </div>
@@ -136,98 +131,97 @@
     private ResumeModel resumeModel = new();
     private bool isSubmitted = false;
     private string? submitError;
+<<<<<<< HEAD
     private string connStr = "Server=localhost;Database=resumesite;User=root;Password="; 
+=======
+    private string connStr = "Server=localhost;Database=resumesite;User=root;Password=";
+>>>>>>> 08fb4b6c0168ab0fc5dcdd6a875af7af9d7983bf
 
     private void HandleValidSubmit()
     {
         SubmitResume();
     }
-private void SubmitResume()
-{
-    try
+
+    private void SubmitResume()
     {
-        using var conn = new MySqlConnection(connStr);
-        conn.Open();
-        Console.WriteLine("Connection Opened");
+        try
+        {
+            using var conn = new MySqlConnection(connStr);
+            conn.Open();
+            Console.WriteLine("Connection Opened");
 
-        string query = @"INSERT INTO resume 
-            (Id, Name, GitHub, Email, City, State, 
-            PastExperience1, PastExperience2, PastExperience3,
-            PastExperienceDetails1, PastExperienceDetails2, PastExperienceDetails3,
-            Project1, Project2, Project3,
-            ProjectDetails1, ProjectDetails2, ProjectDetails3,
-            Languages, Technology, PersonalSkills)
-            VALUES
-            (@Id, @Name, @GitHub, @Email, @City, @State,
-            @PastExperience1, @PastExperience2, @PastExperience3,
-            @PastExperienceDetails1, @PastExperienceDetails2, @PastExperienceDetails3,
-            @Project1, @Project2, @Project3,
-            @ProjectDetails1, @ProjectDetails2, @ProjectDetails3,
-            @Languages, @Technology, @PersonalSkills)";
+            string query = @"INSERT INTO resume 
+                (Name, GitHub, Email, City, State, 
+                PastExperience1, PastExperience2, PastExperience3,
+                PastExperienceDetails1, PastExperienceDetails2, PastExperienceDetails3,
+                Project1, Project2, Project3,
+                ProjectDetails1, ProjectDetails2, ProjectDetails3,
+                Languages, Technology, PersonalSkills)
+                VALUES
+                (@Name, @GitHub, @Email, @City, @State,
+                @PastExperience1, @PastExperience2, @PastExperience3,
+                @PastExperienceDetails1, @PastExperienceDetails2, @PastExperienceDetails3,
+                @Project1, @Project2, @Project3,
+                @ProjectDetails1, @ProjectDetails2, @ProjectDetails3,
+                @Languages, @Technology, @PersonalSkills)";
 
-        // Log the query (without parameters to avoid security issues)
-        Console.WriteLine($"Executing Query: {query}");
+            // Log the query (without parameters to avoid security issues)
+            Console.WriteLine($"Executing Query: {query}");
 
-        using var cmd = new MySqlCommand(query, conn);
+            using var cmd = new MySqlCommand(query, conn);
 
-        // Log the parameters being added
-        LogParameters(cmd.Parameters);
+            cmd.Parameters.AddWithValue("@Name", resumeModel.Name);
+            cmd.Parameters.AddWithValue("@GitHub", resumeModel.GitHub);
+            cmd.Parameters.AddWithValue("@Email", resumeModel.Email);
+            cmd.Parameters.AddWithValue("@City", resumeModel.City);
+            cmd.Parameters.AddWithValue("@State", resumeModel.State);
+            cmd.Parameters.AddWithValue("@PastExperience1", resumeModel.PastExperience1);
+            cmd.Parameters.AddWithValue("@PastExperience2", resumeModel.PastExperience2);
+            cmd.Parameters.AddWithValue("@PastExperience3", resumeModel.PastExperience3);
+            cmd.Parameters.AddWithValue("@PastExperienceDetails1", resumeModel.PastExperienceDetails1);
+            cmd.Parameters.AddWithValue("@PastExperienceDetails2", resumeModel.PastExperienceDetails2);
+            cmd.Parameters.AddWithValue("@PastExperienceDetails3", resumeModel.PastExperienceDetails3);
+            cmd.Parameters.AddWithValue("@Project1", resumeModel.Project1);
+            cmd.Parameters.AddWithValue("@Project2", resumeModel.Project2);
+            cmd.Parameters.AddWithValue("@Project3", resumeModel.Project3);
+            cmd.Parameters.AddWithValue("@ProjectDetails1", resumeModel.ProjectDetails1);
+            cmd.Parameters.AddWithValue("@ProjectDetails2", resumeModel.ProjectDetails2);
+            cmd.Parameters.AddWithValue("@ProjectDetails3", resumeModel.ProjectDetails3);
+            cmd.Parameters.AddWithValue("@Languages", resumeModel.Languages);
+            cmd.Parameters.AddWithValue("@Technology", resumeModel.Technology);
+            cmd.Parameters.AddWithValue("@PersonalSkills", resumeModel.PersonalSkills);
 
-        cmd.Parameters.AddWithValue("@Id", resumeModel.Id);
-        cmd.Parameters.AddWithValue("@Name", resumeModel.Name);
-        cmd.Parameters.AddWithValue("@GitHub", resumeModel.GitHub);
-        cmd.Parameters.AddWithValue("@Email", resumeModel.Email);
-        cmd.Parameters.AddWithValue("@City", resumeModel.City);
-        cmd.Parameters.AddWithValue("@State", resumeModel.State);
-        cmd.Parameters.AddWithValue("@PastExperience1", resumeModel.PastExperience1);
-        cmd.Parameters.AddWithValue("@PastExperience2", resumeModel.PastExperience2);
-        cmd.Parameters.AddWithValue("@PastExperience3", resumeModel.PastExperience3);
-        cmd.Parameters.AddWithValue("@PastExperienceDetails1", resumeModel.PastExperienceDetails1);
-        cmd.Parameters.AddWithValue("@PastExperienceDetails2", resumeModel.PastExperienceDetails2);
-        cmd.Parameters.AddWithValue("@PastExperienceDetails3", resumeModel.PastExperienceDetails3);
-        cmd.Parameters.AddWithValue("@Project1", resumeModel.Project1);
-        cmd.Parameters.AddWithValue("@Project2", resumeModel.Project2);
-        cmd.Parameters.AddWithValue("@Project3", resumeModel.Project3);
-        cmd.Parameters.AddWithValue("@ProjectDetails1", resumeModel.ProjectDetails1);
-        cmd.Parameters.AddWithValue("@ProjectDetails2", resumeModel.ProjectDetails2);
-        cmd.Parameters.AddWithValue("@ProjectDetails3", resumeModel.ProjectDetails3);
-        cmd.Parameters.AddWithValue("@Languages", resumeModel.Languages);
-        cmd.Parameters.AddWithValue("@Technology", resumeModel.Technology);
-        cmd.Parameters.AddWithValue("@PersonalSkills", resumeModel.PersonalSkills);
+            // Log the parameter values (before execution)
+            LogParameters(cmd.Parameters);
+            
 
-        // Log the parameter values (before execution)
-        LogParameters(cmd.Parameters);
+            // Execute the query and log if successful
+            cmd.ExecuteNonQuery();
+            isSubmitted = true;
 
-        // Execute the query and log if successful
-        cmd.ExecuteNonQuery();
-        isSubmitted = true;
-
-        Console.WriteLine("Resume submitted successfully!");
+            Console.WriteLine("Resume submitted successfully!");
+            Console.WriteLine(query);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error inserting resume: {ex.Message}");
+        }
     }
-    catch (Exception ex)
+
+    // Helper method to log SQL parameters
+    private void LogParameters(MySqlParameterCollection parameters)
     {
-        Console.WriteLine($"Error inserting resume: {ex.Message}");
+        foreach (MySqlParameter parameter in parameters)
+        {
+            Console.WriteLine($"Parameter: {parameter.ParameterName}, Value: {parameter.Value}");
+        }
     }
-}
-
-// Helper method to log SQL parameters
-private void LogParameters(MySqlParameterCollection parameters)
-{
-    foreach (MySqlParameter parameter in parameters)
-    {
-        Console.WriteLine($"Parameter: {parameter.ParameterName}, Value: {parameter.Value}");
-    }
-}
-
 
     public class ResumeModel
     {
-        public string? Id { get; set; }
         public string? Name { get; set; }
         public string? GitHub { get; set; }
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string? Email { get; set; }
 
         public string? City { get; set; }

@@ -44,6 +44,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Components": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[9.2.0, )"
